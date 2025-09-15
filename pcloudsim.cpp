@@ -96,7 +96,7 @@ PointCloudData simplify(const PointCloudData &data,
                                 nanoflann::SearchParameters(10));
 
       if (result.size() <= 1) {
-        // nothing.
+        valid[i] = false;
         continue;
       }
 
