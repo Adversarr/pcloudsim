@@ -1,0 +1,30 @@
+[project]
+name = "pcloudsim"
+version = "0.1.0"
+description = "Point cloud simplification"
+authors = [
+    {name = "Adversarr",email = "yangzherui2001@foxmail.com"}
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy (>=2.0.0,<3.0.0)",
+    "setuptools (>=75.8.2,<76.0.0)",
+    "nanobind (>=2.5.0,<3.0.0)",
+]
+
+[build-system]
+requires = [
+    "scikit-build-core >=0.10",
+    "nanobind >=2.5.0"
+]
+build-backend = "scikit_build_core.build"
+
+#### Build CMake.
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+build-dir = "build"
+
+[tool.scikit-build.cmake]
+build-type = "Release"
