@@ -1,6 +1,6 @@
 [project]
 name = "pcloudsim"
-version = "0.1.0"
+version = "0.1.1"
 description = "Point cloud simplification"
 authors = [
     {name = "Adversarr",email = "yangzherui2001@foxmail.com"}
