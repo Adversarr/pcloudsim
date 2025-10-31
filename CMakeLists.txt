@@ -32,7 +32,7 @@ CPMAddPackage(
 
 find_package(OpenMP)
 
-nanobind_add_module(pcloudsim_binding pcloudsim.cpp bind.cpp)
+nanobind_add_module(pcloudsim_binding pcloudsim.cpp sampling.cpp bind.cpp)
 target_link_libraries(pcloudsim_binding PUBLIC Eigen3::Eigen)
 
 if (OpenMP_CXX_FOUND)

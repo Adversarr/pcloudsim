@@ -4,6 +4,7 @@ A Python wrapper for point cloud simplification and filtering operations.
 """
 
 from . import pcloudsim_binding as _pcloudsim_binding
+import numpy as np
 
 
 class RemovalParams:
@@ -127,3 +128,54 @@ def simplify_point_cloud(points, features, params = RemovalParams()):
 
 # Export public API
 __all__ = ['RemovalParams', 'simplify_point_cloud']
+
+
+def sample_points_uniformly(vertices: np.ndarray, faces: np.ndarray, num_points: int) -> np.ndarray:
+    """Sample points uniformly over a triangle mesh surface.
+
+    Args:
+        vertices (np.ndarray): Vertex array shaped (N, 3) float64.
+        faces (np.ndarray): Triangle index array shaped (M, 3) int32.
+        num_points (int): Number of points to sample.
+
+    Returns:
+        np.ndarray: Sampled points shaped (num_points, 3) float64.
+
+    Notes:
+        - Faces are assumed to be 0-based indices.
+        - Output is converted from internal column-major (3, K) to (K, 3) for Python convenience.
+        - Uses double precision internally.
+    """
+    sampled = _pcloudsim_binding.sample_points_uniformly(vertices, faces, num_points)
+    return sampled.T
+
+
+def sample_points_poisson_disk(vertices: np.ndarray, faces: np.ndarray, num_points: int, init_factor: int = 5) -> np.ndarray:
+    """Sample points with Poisson-disk-like spacing via exact greedy elimination.
+
+    Args:
+        vertices (np.ndarray): Vertex array shaped (N, 3) float64.
+        faces (np.ndarray): Triangle index array shaped (M, 3) int32.
+        num_points (int): Target number of points after elimination.
+        init_factor (int, optional): Oversampling multiplier. Defaults to 5.
+
+    Returns:
+        np.ndarray: Sampled points shaped (num_points, 3) float64.
+
+    Notes:
+        - Uses Euclidean distances between sampled points; geodesic spacing is not used.
+        - Output is converted from internal column-major (3, K) to (K, 3).
+        - Double precision is used internally for robustness.
+        - TODO: If faces are 1-based in some inputs, consider adjusting indices before calling.
+    """
+    sampled = _pcloudsim_binding.sample_points_poisson_disk(vertices, faces, num_points, init_factor)
+    return sampled.T
+
+
+# Export public API (updated)
+__all__ = [
+    'RemovalParams',
+    'simplify_point_cloud',
+    'sample_points_uniformly',
+    'sample_points_poisson_disk',
+]

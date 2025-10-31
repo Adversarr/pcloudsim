@@ -28,3 +28,8 @@ build-dir = "build"
 
 [tool.scikit-build.cmake]
 build-type = "Release"
+
+[dependency-groups]
+dev = [
+    "open3d>=0.19.0",
+]
