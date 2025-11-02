@@ -17,6 +17,10 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+# Detect the installed nanobind package and import it into CMake
+execute_process(
+  COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+  OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_ROOT)
 find_package(nanobind CONFIG REQUIRED)
 
 include(cmake/CPM.cmake)
@@ -32,8 +36,11 @@ CPMAddPackage(
 
 find_package(OpenMP)
 
-nanobind_add_module(pcloudsim_binding pcloudsim.cpp sampling.cpp bind.cpp)
+nanobind_add_module(pcloudsim_binding
+  NB_STATIC STABLE_ABI NOSTRIP
+  pcloudsim.cpp sampling.cpp bind.cpp)
 target_link_libraries(pcloudsim_binding PUBLIC Eigen3::Eigen)
+set_target_properties(pcloudsim_binding PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if (OpenMP_CXX_FOUND)
     target_link_libraries(pcloudsim_binding PUBLIC OpenMP::OpenMP_CXX)
